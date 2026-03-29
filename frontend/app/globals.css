@@ -1,8 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f4f6f1;
+  --foreground: #24342f;
+  --text-primary: #24342f;
+  --text-secondary: #4c5f58;
+  --glass-bg: rgba(255, 255, 255, 0.5);
+  --glass-bg-strong: rgba(255, 255, 255, 0.68);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --accent: #5f7d6d;
+  --accent-soft: #8aa595;
+  --accent-warm: #d8b88a;
+  --accent-gold: #d9c48f;
+  --surface-warning: rgba(255, 247, 230, 0.72);
+  --surface-warning-border: rgba(222, 184, 135, 0.55);
+  --selection-bg: rgba(216, 184, 138, 0.36);
+  --selection-fg: #23312b;
 }
 
 @theme inline {
@@ -12,15 +25,43 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background:
+    radial-gradient(circle at 8% -8%, rgba(175, 197, 181, 0.3), transparent 38%),
+    radial-gradient(circle at 92% 4%, rgba(216, 184, 138, 0.28), transparent 36%),
+    linear-gradient(155deg, #f3f6ef 0%, #e9ede4 100%);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), "Segoe UI", sans-serif;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+::selection {
+  background: var(--selection-bg);
+  color: var(--selection-fg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #121916;
+    --foreground: #e4ede8;
+    --text-primary: #e4ede8;
+    --text-secondary: #b4c2bb;
+    --glass-bg: rgba(27, 37, 33, 0.58);
+    --glass-bg-strong: rgba(32, 44, 39, 0.72);
+    --glass-border: rgba(168, 187, 176, 0.24);
+    --accent: #9ab8a7;
+    --accent-soft: #7f9a8b;
+    --accent-warm: #bca076;
+    --accent-gold: #b9ab78;
+    --surface-warning: rgba(60, 47, 26, 0.56);
+    --surface-warning-border: rgba(176, 141, 92, 0.42);
+    --selection-bg: rgba(185, 171, 120, 0.3);
+    --selection-fg: #f5efe2;
+  }
+
+  body {
+    background:
+      radial-gradient(circle at 8% -8%, rgba(86, 120, 102, 0.28), transparent 38%),
+      radial-gradient(circle at 92% 4%, rgba(155, 125, 84, 0.24), transparent 36%),
+      linear-gradient(155deg, #101613 0%, #161f1a 100%);
+  }
 }
