@@ -11,6 +11,11 @@ type MacroNutrientTrackerProps = {
     subtitle: string;
     totalRemaining: string;
     remaining: string;
+    nutrientLabels: {
+      protein: string;
+      carbs: string;
+      fats: string;
+    };
   };
 };
 
@@ -71,7 +76,7 @@ export function MacroNutrientTracker({ locale, target, consumed, copy }: MacroNu
       <div className="space-y-4">
         <MacroRow
           locale={locale}
-          label="Protein"
+          label={copy.nutrientLabels.protein}
           consumed={consumed.protein}
           target={target.protein}
           tintClass="bg-[color:var(--accent)]"
@@ -79,7 +84,7 @@ export function MacroNutrientTracker({ locale, target, consumed, copy }: MacroNu
         />
         <MacroRow
           locale={locale}
-          label="Carbs"
+          label={copy.nutrientLabels.carbs}
           consumed={consumed.carbs}
           target={target.carbs}
           tintClass="bg-[color:var(--accent-gold)]"
@@ -87,7 +92,7 @@ export function MacroNutrientTracker({ locale, target, consumed, copy }: MacroNu
         />
         <MacroRow
           locale={locale}
-          label="Fats"
+          label={copy.nutrientLabels.fats}
           consumed={consumed.fats}
           target={target.fats}
           tintClass="bg-[color:var(--accent-warm)]"

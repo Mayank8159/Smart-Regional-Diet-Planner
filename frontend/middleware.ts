@@ -19,6 +19,13 @@ function detectLocale(request: NextRequest) {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Skip locale redirection for static assets served from /public
+  // (e.g. /hero/slide-1.svg) so they are not rewritten to /en/hero/...
+  const isPublicAsset = /\.[a-zA-Z0-9]+$/.test(pathname);
+  if (isPublicAsset) {
+    return NextResponse.next();
+  }
+
   const hasLocalePrefix = locales.some(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),
   );

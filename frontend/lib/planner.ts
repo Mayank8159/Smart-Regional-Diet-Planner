@@ -1,4 +1,4 @@
-import { regionalFoodDatabase, type RegionKey, type RegionalFood } from "@/lib/regional-food-db";
+import { stateFoodDatabase, type IndianStateName, type StateFoodItem } from "@/lib/state-food-data";
 
 export type ActivityLevel = "sedentary" | "light" | "moderate" | "active" | "athlete";
 export type Gender = "male" | "female" | "other";
@@ -10,12 +10,16 @@ export type UserProfile = {
   weightKg: number;
   heightCm: number;
   activityLevel: ActivityLevel;
-  region: RegionKey;
+  region: IndianStateName;
   goalMode: GoalMode;
 };
 
+export type OptimizerFood = StateFoodItem & {
+  affordabilityScore: 1 | 2 | 3 | 4 | 5;
+};
+
 export type PlannerRecommendation = {
-  food: RegionalFood;
+  food: OptimizerFood;
   score: number;
   reason: string;
 };
@@ -34,10 +38,13 @@ const goalAdjustments: Record<GoalMode, number> = {
   gain: 0.12,
 };
 
-const regionPriorityKeywords: Record<RegionKey, string[]> = {
-  "west-bengal": ["fish", "rice"],
-  kashmir: ["walnut", "yogurt", "mutton", "dairy"],
-  "south-india": ["idli", "appam", "sambar", "curd"],
+const statePriorityKeywords: Partial<Record<IndianStateName, string[]>> = {
+  "West Bengal": ["fish", "rice"],
+  "Tamil Nadu": ["idli", "sambar", "curd", "dosa"],
+  "Kerala": ["fish", "curd", "appam"],
+  "Karnataka": ["idli", "dosa", "upma"],
+  "Andhra Pradesh": ["rice", "fish", "egg"],
+  Telangana: ["rice", "egg", "chicken"],
 };
 
 function genderOffset(gender: Gender): number {
@@ -73,9 +80,29 @@ export function calculateCalorieTarget(profile: UserProfile): {
   };
 }
 
-function regionPriorityBoost(foodName: string, region: RegionKey): number {
+function deriveAffordabilityScore(food: StateFoodItem): 1 | 2 | 3 | 4 | 5 {
+  if (food.calories <= 190) {
+    return 1;
+  }
+
+  if (food.calories <= 250) {
+    return 2;
+  }
+
+  if (food.calories <= 320) {
+    return 3;
+  }
+
+  if (food.calories <= 380) {
+    return 4;
+  }
+
+  return 5;
+}
+
+function regionPriorityBoost(foodName: string, region: IndianStateName): number {
   const lower = foodName.toLowerCase();
-  const keywords = regionPriorityKeywords[region];
+  const keywords = statePriorityKeywords[region] ?? [];
 
   if (keywords.some((keyword) => lower.includes(keyword))) {
     return 1;
@@ -84,27 +111,38 @@ function regionPriorityBoost(foodName: string, region: RegionKey): number {
   return 0;
 }
 
-export function optimizeFoods(profile: UserProfile, limit = 5): PlannerRecommendation[] {
-  const recommendations = regionalFoodDatabase.map((food) => {
-    const nutritionDensity = (food.macros.protein * 4 + food.macros.carbs * 1.25 + food.macros.fats * 1.5) / food.calories;
-    const budgetScore = (6 - food.affordabilityScore) / 5;
-    const availability = food.regionalAvailability[profile.region];
-    const priority = regionPriorityBoost(food.name, profile.region);
+export function optimizeFoods(profile: UserProfile, limit?: number): PlannerRecommendation[] {
+  const foodsInSelectedState = stateFoodDatabase.filter((food) => food.state === profile.region);
 
-    const score = nutritionDensity * 0.45 + budgetScore * 0.25 + availability * 0.2 + priority * 0.1;
+  const recommendations = foodsInSelectedState.map((food) => {
+    const affordabilityScore = deriveAffordabilityScore(food);
+    const nutritionDensity = (food.macros.protein * 4 + food.macros.carbs * 1.25 + food.macros.fats * 1.5) / food.calories;
+    const budgetScore = (6 - affordabilityScore) / 5;
+    const priority = regionPriorityBoost(food.foodName, profile.region);
+
+    const score = nutritionDensity * 0.6 + budgetScore * 0.3 + priority * 0.1;
 
     const reasonParts = [
-      `availability ${Math.round(availability * 100)}%`,
-      `affordability ${food.affordabilityScore}/5`,
+      `state ${food.state}`,
+      `affordability ${affordabilityScore}/5`,
       priority > 0 ? "regional priority match" : "balanced macro value",
     ];
 
     return {
-      food,
+      food: {
+        ...food,
+        affordabilityScore,
+      },
       score,
       reason: reasonParts.join(" • "),
     };
   });
 
-  return recommendations.sort((a, b) => b.score - a.score).slice(0, limit);
+  const sorted = recommendations.sort((a, b) => b.score - a.score);
+
+  if (typeof limit === "number") {
+    return sorted.slice(0, limit);
+  }
+
+  return sorted;
 }

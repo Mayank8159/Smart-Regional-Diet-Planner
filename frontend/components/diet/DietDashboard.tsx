@@ -190,6 +190,7 @@ export function DietDashboard({ locale }: DietDashboardProps) {
             subtitle: copy.macroTrackerSubtitle,
             totalRemaining: copy.totalRemaining,
             remaining: copy.remaining,
+            nutrientLabels: copy.nutrientLabels,
           }}
         />
       </motion.div>
@@ -258,6 +259,9 @@ export function DietDashboard({ locale }: DietDashboardProps) {
                 calories={meal.calories}
                 caloriesLabel={copy.calories}
                 mealTimeLabel={copy.mealTimes[meal.mealTime]}
+                descriptionLabel={copy.mealCard.subtitle}
+                macroBadgeLabel={copy.mealCard.macroBadge}
+                nutrientLabels={copy.nutrientLabels}
               />
               <SmartSwapToggle
                 open={Boolean(smartSwapOpenByMealId[meal.id])}
