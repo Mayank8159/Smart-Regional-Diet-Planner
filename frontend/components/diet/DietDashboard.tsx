@@ -49,7 +49,6 @@ type FoodMeta = {
   diet: "veg" | "egg" | "non-veg";
   jainFriendly: boolean;
   allergens: { nuts: boolean; dairy: boolean; gluten: boolean };
-  affordability: 1 | 2 | 3 | 4 | 5;
 };
 
 type PersistedPlannerState = {
@@ -61,7 +60,6 @@ type PersistedPlannerState = {
   dietPreference: DietPreference;
   allergies: AllergiesState;
   dislikedInput: string;
-  affordabilityMode: boolean;
   mealPlan: PlannedMeal[];
 };
 
@@ -200,19 +198,6 @@ function getFoodMeta(food: StateFoodItem): FoodMeta {
     diet = "egg";
   }
 
-  let affordability: FoodMeta["affordability"] = 3;
-  if (food.calories <= 220) {
-    affordability = 1;
-  } else if (food.calories <= 280) {
-    affordability = 2;
-  } else if (food.calories <= 340) {
-    affordability = 3;
-  } else if (food.calories <= 390) {
-    affordability = 4;
-  } else {
-    affordability = 5;
-  }
-
   return {
     diet,
     jainFriendly: diet === "veg" && !hasRootVeg,
@@ -221,7 +206,6 @@ function getFoodMeta(food: StateFoodItem): FoodMeta {
       dairy: hasPaneer || hasCurd || hasMilk,
       gluten: hasGluten,
     },
-    affordability,
   };
 }
 
@@ -547,7 +531,6 @@ export function DietDashboard({ locale }: DietDashboardProps) {
   const [dietPreference, setDietPreference] = useState<DietPreference>("all");
   const [allergies, setAllergies] = useState<AllergiesState>({ nuts: false, dairy: false, gluten: false });
   const [dislikedInput, setDislikedInput] = useState("");
-  const [affordabilityMode, setAffordabilityMode] = useState(false);
   const [mealPlan, setMealPlan] = useState<PlannedMeal[]>([]);
   const [locationStatus, setLocationStatus] = useState<"idle" | "detecting" | "detected" | "failed">("idle");
   const [hasHydratedPersistence, setHasHydratedPersistence] = useState(false);
@@ -590,9 +573,6 @@ export function DietDashboard({ locale }: DietDashboardProps) {
       if (typeof saved.dislikedInput === "string") {
         setDislikedInput(saved.dislikedInput);
       }
-      if (typeof saved.affordabilityMode === "boolean") {
-        setAffordabilityMode(saved.affordabilityMode);
-      }
       if (Array.isArray(saved.mealPlan)) {
         setMealPlan(saved.mealPlan);
       }
@@ -617,13 +597,11 @@ export function DietDashboard({ locale }: DietDashboardProps) {
       dietPreference,
       allergies,
       dislikedInput,
-      affordabilityMode,
       mealPlan,
     };
 
     window.localStorage.setItem(PLANNER_STORAGE_KEY, JSON.stringify(stateToPersist));
   }, [
-    affordabilityMode,
     allergies,
     dietPreference,
     dislikedInput,
@@ -772,7 +750,6 @@ export function DietDashboard({ locale }: DietDashboardProps) {
     const candidates = filteredFoods
       .map((item) => {
         const nutrition = scaledNutrition(item, 1);
-        const meta = getFoodMeta(item);
 
         const deficitMatch =
           Math.abs(remaining.protein - nutrition.protein) * 3 +
@@ -780,28 +757,14 @@ export function DietDashboard({ locale }: DietDashboardProps) {
           Math.abs(remaining.fats - nutrition.fats) * 2 +
           Math.abs(remaining.calories - nutrition.calories) * 0.2;
 
-        const affordabilityPenalty = affordabilityMode ? meta.affordability * 8 : 0;
         return {
           item,
-          score: deficitMatch + affordabilityPenalty,
-          affordability: meta.affordability,
+          score: deficitMatch,
         };
       })
       .sort((a, b) => a.score - b.score);
 
     return candidates.slice(0, 5);
-  }, [affordabilityMode, filteredFoods, remaining]);
-
-  const budgetAlternativesBySlot = useMemo(() => {
-    const sorted = [...filteredFoods].sort((a, b) => getFoodMeta(a).affordability - getFoodMeta(b).affordability);
-    const top = sorted.slice(0, 2);
-    return slotOrder.reduce<Record<MealSlot, StateFoodItem[]>>(
-      (acc, slot) => {
-        acc[slot] = top;
-        return acc;
-      },
-      { breakfast: [], lunch: [], snack: [], dinner: [] },
-    );
   }, [filteredFoods]);
 
   const progress = useMemo(
@@ -917,14 +880,6 @@ export function DietDashboard({ locale }: DietDashboardProps) {
                     <option value="lean-bulk">{macroPresets["lean-bulk"].label}</option>
                     <option value="custom">Custom</option>
                   </select>
-                </label>
-                <label className="inline-flex items-center gap-2 text-xs text-[color:var(--text-secondary)]">
-                  <input
-                    type="checkbox"
-                    checked={affordabilityMode}
-                    onChange={(event) => setAffordabilityMode(event.target.checked)}
-                  />
-                  Budget & affordability mode
                 </label>
               </div>
 
@@ -1303,18 +1258,6 @@ export function DietDashboard({ locale }: DietDashboardProps) {
                   <p className="text-xs text-[color:var(--text-secondary)]">{plannerCopy.noItemsYet}</p>
                 ) : null}
 
-                {affordabilityMode && budgetAlternativesBySlot[slot].length > 0 ? (
-                  <div className="pt-2">
-                    <p className="text-[11px] font-medium text-[color:var(--text-secondary)]">Low-cost alternatives</p>
-                    <div className="mt-1 space-y-1">
-                      {budgetAlternativesBySlot[slot].map((item) => (
-                        <p key={`${slot}-${item.id}`} className="text-[11px] text-[color:var(--text-secondary)]">
-                          {item.foodName} ({formatCalories(locale, item.calories)} kcal)
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-                ) : null}
               </div>
             </div>
           ))}
@@ -1355,9 +1298,6 @@ export function DietDashboard({ locale }: DietDashboardProps) {
               <p className="mt-1 text-xs text-[color:var(--text-secondary)]">
                 {suggestion.item.servingSize} • {formatCalories(locale, suggestion.item.calories)} kcal • P {formatGrams(locale, suggestion.item.macros.protein)}g • C {formatGrams(locale, suggestion.item.macros.carbs)}g • F {formatGrams(locale, suggestion.item.macros.fats)}g
               </p>
-              {affordabilityMode ? (
-                <p className="mt-1 text-xs text-[color:var(--text-secondary)]">Affordability score: {suggestion.affordability}/5</p>
-              ) : null}
               <button
                 type="button"
                 onClick={() => {

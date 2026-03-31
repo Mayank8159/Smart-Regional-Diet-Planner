@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Smart Indian Diet Planner",
+  title: "Smart Regional Diet Planner",
   description: "A regional, macro-aware diet dashboard with smart meal swaps.",
 };
 

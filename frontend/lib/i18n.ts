@@ -136,7 +136,7 @@ export type LocaleCopy = {
 
 export const copyByLocale: Record<Locale, LocaleCopy> = {
   en: {
-    appBadge: "Smart Indian Diet Planner",
+    appBadge: "Smart Regional Diet Planner",
     dashboardTitle: "Regional Wellness Dashboard",
     dashboardSubtitle: "Dynamic regional meals with macro intelligence and one-tap Smart Swaps.",
     nutrientLabels: { protein: "Protein", carbs: "Carbs", fats: "Fats" },
@@ -145,7 +145,7 @@ export const copyByLocale: Record<Locale, LocaleCopy> = {
       subtitle: "Curated for balanced regional nutrition.",
     },
     hero: {
-      kicker: "Smart Indian Diet Planner",
+      kicker: "Smart Regional Diet Planner",
       slides: [
         {
           title: "Precision Nutrition, Beautifully Designed",
@@ -273,7 +273,7 @@ export const copyByLocale: Record<Locale, LocaleCopy> = {
     },
   },
   hi: {
-    appBadge: "स्मार्ट भारतीय डाइट प्लानर",
+    appBadge: "स्मार्ट रीजनल डाइट प्लानर",
     dashboardTitle: "क्षेत्रीय वेलनेस डैशबोर्ड",
     dashboardSubtitle: "मैक्रो इंटेलिजेंस और वन-टैप स्मार्ट स्वैप्स के साथ क्षेत्रीय भोजन योजना।",
     nutrientLabels: { protein: "प्रोटीन", carbs: "कार्ब्स", fats: "वसा" },
@@ -282,7 +282,7 @@ export const copyByLocale: Record<Locale, LocaleCopy> = {
       subtitle: "संतुलित क्षेत्रीय पोषण के लिए चुना गया भोजन।",
     },
     hero: {
-      kicker: "स्मार्ट भारतीय डाइट प्लानर",
+      kicker: "स्मार्ट रीजनल डाइट प्लानर",
       slides: [
         {
           title: "सटीक पोषण, सुंदर डिज़ाइन",
@@ -410,7 +410,7 @@ export const copyByLocale: Record<Locale, LocaleCopy> = {
     },
   },
   bn: {
-    appBadge: "স্মার্ট ভারতীয় ডায়েট প্ল্যানার",
+    appBadge: "স্মার্ট রিজিওনাল ডায়েট প্ল্যানার",
     dashboardTitle: "আঞ্চলিক ওয়েলনেস ড্যাশবোর্ড",
     dashboardSubtitle: "ম্যাক্রো ইন্টেলিজেন্স এবং এক-ট্যাপ স্মার্ট সোয়াপসহ আঞ্চলিক খাবারের পরিকল্পনা।",
     nutrientLabels: { protein: "প্রোটিন", carbs: "কার্বস", fats: "ফ্যাট" },
@@ -419,7 +419,7 @@ export const copyByLocale: Record<Locale, LocaleCopy> = {
       subtitle: "সুষম আঞ্চলিক পুষ্টির জন্য বাছাইকৃত খাবার।",
     },
     hero: {
-      kicker: "স্মার্ট ভারতীয় ডায়েট প্ল্যানার",
+      kicker: "স্মার্ট রিজিওনাল ডায়েট প্ল্যানার",
       slides: [
         {
           title: "নিখুঁত পুষ্টি, চমৎকার নকশা",
