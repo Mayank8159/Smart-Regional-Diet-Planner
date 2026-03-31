@@ -16,6 +16,12 @@
   --surface-warning-border: rgba(222, 184, 135, 0.55);
   --selection-bg: rgba(216, 184, 138, 0.36);
   --selection-fg: #23312b;
+  --earth-saffron: rgba(240, 153, 48, 0.22);
+  --earth-teal: rgba(35, 143, 136, 0.2);
+  --earth-terracotta: rgba(190, 92, 70, 0.2);
+  --aura-teal: rgba(74, 185, 171, 0.34);
+  --aura-indigo: rgba(76, 88, 186, 0.34);
+  --aura-saffron: rgba(234, 166, 66, 0.3);
 }
 
 @theme inline {
@@ -26,12 +32,53 @@
 }
 
 body {
-  background:
-    radial-gradient(circle at 8% -8%, rgba(175, 197, 181, 0.3), transparent 38%),
-    radial-gradient(circle at 92% 4%, rgba(216, 184, 138, 0.28), transparent 36%),
-    linear-gradient(155deg, #f3f6ef 0%, #e9ede4 100%);
+  background: linear-gradient(145deg, #f6f7f2 0%, #ecf0eb 48%, #e6eeeb 100%);
+  background-attachment: fixed;
+  position: relative;
+  isolation: isolate;
   color: var(--foreground);
   font-family: var(--font-geist-sans), "Segoe UI", sans-serif;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(42rem 32rem at 10% 6%, var(--aura-teal), transparent 68%),
+    radial-gradient(46rem 34rem at 86% 14%, var(--aura-indigo), transparent 70%),
+    radial-gradient(34rem 28rem at 62% 88%, var(--aura-saffron), transparent 72%);
+  filter: blur(80px) saturate(115%);
+  opacity: 0.95;
+  animation: aura-drift 24s ease-in-out infinite alternate;
+  z-index: -2;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 30px 30px;
+  mask-image: radial-gradient(circle at 50% 25%, black 28%, transparent 86%);
+  opacity: 0.2;
+  z-index: -1;
+}
+
+@keyframes aura-drift {
+  0% {
+    transform: translate3d(-2%, 0%, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(1.8%, -1.4%, 0) scale(1.05);
+  }
+  100% {
+    transform: translate3d(2.6%, 1.2%, 0) scale(1.08);
+  }
 }
 
 ::selection {
@@ -56,12 +103,55 @@ body {
     --surface-warning-border: rgba(176, 141, 92, 0.42);
     --selection-bg: rgba(185, 171, 120, 0.3);
     --selection-fg: #f5efe2;
+    --earth-saffron: rgba(236, 162, 78, 0.2);
+    --earth-teal: rgba(70, 150, 144, 0.18);
+    --earth-terracotta: rgba(182, 96, 80, 0.18);
+    --aura-teal: rgba(72, 170, 160, 0.26);
+    --aura-indigo: rgba(86, 96, 189, 0.3);
+    --aura-saffron: rgba(225, 155, 70, 0.24);
   }
 
   body {
-    background:
-      radial-gradient(circle at 8% -8%, rgba(86, 120, 102, 0.28), transparent 38%),
-      radial-gradient(circle at 92% 4%, rgba(155, 125, 84, 0.24), transparent 36%),
-      linear-gradient(155deg, #101613 0%, #161f1a 100%);
+    background: linear-gradient(150deg, #0f1419 0%, #121a22 46%, #111820 100%);
+    background-attachment: fixed;
   }
+
+  body::before {
+    opacity: 0.88;
+    filter: blur(82px) saturate(120%);
+  }
+
+  body::after {
+    background-image:
+      linear-gradient(rgba(208, 219, 225, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(208, 219, 225, 0.05) 1px, transparent 1px);
+    opacity: 0.16;
+  }
+}
+
+/* Ensure native dropdown option list remains readable across themes */
+.diet-select {
+  color-scheme: light;
+}
+
+.diet-select option {
+  color: #1f2937;
+  background-color: #ffffff;
+}
+
+.bento-card {
+  border: 1px solid var(--glass-border);
+  background:
+    radial-gradient(circle at 0% 0%, var(--earth-saffron), transparent 45%),
+    radial-gradient(circle at 100% 10%, var(--earth-teal), transparent 46%),
+    radial-gradient(circle at 75% 100%, var(--earth-terracotta), transparent 42%),
+    var(--glass-bg);
+  box-shadow: 0 12px 36px rgba(50, 80, 60, 0.14);
+  backdrop-filter: blur(14px);
+}
+
+.bento-subcard {
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(10px);
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { ChevronDown } from "lucide-react";
 import { formatCalories, formatGrams } from "@/lib/formatters";
 import { copyByLocale, type Locale } from "@/lib/i18n";
 import {
@@ -38,8 +39,17 @@ function FieldLabel({ children }: { children: React.ReactNode }) {
 
 function InputShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-xl border border-[color:var(--glass-border)] bg-[color:var(--glass-bg-strong)] px-3 py-2">
+    <div className="rounded-xl border border-[color:var(--glass-border)] bg-[color:var(--glass-bg-strong)] px-3 py-2 transition focus-within:border-[color:var(--accent)] focus-within:ring-2 focus-within:ring-[color:var(--accent)]/30">
       {children}
+    </div>
+  );
+}
+
+function SelectShell({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="relative rounded-xl border border-[color:var(--glass-border)] bg-[color:var(--glass-bg-strong)] px-3 py-2 transition focus-within:border-[color:var(--accent)] focus-within:ring-2 focus-within:ring-[color:var(--accent)]/30">
+      {children}
+      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--text-secondary)]" />
     </div>
   );
 }
@@ -66,6 +76,21 @@ export function UserProfilePlanner({ locale }: UserProfilePlannerProps) {
 
   const calorieResult = useMemo(() => calculateCalorieTarget(profile), [profile]);
   const recommendations = useMemo(() => optimizeFoods(profile), [profile]);
+
+  const optimizerFocusValue = useMemo(() => {
+    if (profile.goalMode === "fat-loss") {
+      return `${copy.planner.cards.budgetVsNutrition} • Calorie Deficit`;
+    }
+
+    if (profile.goalMode === "gain") {
+      return `${copy.planner.cards.budgetVsNutrition} • Protein Forward`;
+    }
+
+    return `${copy.planner.cards.budgetVsNutrition} • Balanced`;
+  }, [copy.planner.cards.budgetVsNutrition, profile.goalMode]);
+
+  const maintenanceDelta = Math.max(calorieResult.maintenanceCalories - calorieResult.bmr, 0);
+  const targetDelta = calorieResult.targetCalories - calorieResult.maintenanceCalories;
 
   const filteredRecommendations = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -113,9 +138,9 @@ export function UserProfilePlanner({ locale }: UserProfilePlannerProps) {
 
         <div>
           <FieldLabel>{copy.planner.gender}</FieldLabel>
-          <InputShell>
+          <SelectShell>
             <select
-              className="w-full bg-transparent text-sm text-[color:var(--text-primary)] outline-none"
+              className="diet-select w-full appearance-none bg-transparent pr-6 text-sm text-[color:var(--text-primary)] outline-none"
               value={profile.gender}
               onChange={(event) =>
                 setProfile((state) => ({ ...state, gender: event.target.value as Gender }))
@@ -125,7 +150,7 @@ export function UserProfilePlanner({ locale }: UserProfilePlannerProps) {
               <option value="female">{copy.planner.genders.female}</option>
               <option value="other">{copy.planner.genders.other}</option>
             </select>
-          </InputShell>
+          </SelectShell>
         </div>
 
         <div>
@@ -162,9 +187,9 @@ export function UserProfilePlanner({ locale }: UserProfilePlannerProps) {
 
         <div>
           <FieldLabel>{copy.planner.activityLevel}</FieldLabel>
-          <InputShell>
+          <SelectShell>
             <select
-              className="w-full bg-transparent text-sm text-[color:var(--text-primary)] outline-none"
+              className="diet-select w-full appearance-none bg-transparent pr-6 text-sm text-[color:var(--text-primary)] outline-none"
               value={profile.activityLevel}
               onChange={(event) =>
                 setProfile((state) => ({ ...state, activityLevel: event.target.value as ActivityLevel }))
@@ -176,14 +201,14 @@ export function UserProfilePlanner({ locale }: UserProfilePlannerProps) {
                 </option>
               ))}
             </select>
-          </InputShell>
+          </SelectShell>
         </div>
 
         <div>
           <FieldLabel>{copy.planner.region}</FieldLabel>
-          <InputShell>
+          <SelectShell>
             <select
-              className="w-full bg-transparent text-sm text-[color:var(--text-primary)] outline-none"
+              className="diet-select w-full appearance-none bg-transparent pr-6 text-sm text-[color:var(--text-primary)] outline-none"
               value={profile.region}
               onChange={(event) => {
                 setCurrentPage(1);
@@ -196,14 +221,14 @@ export function UserProfilePlanner({ locale }: UserProfilePlannerProps) {
                 </option>
               ))}
             </select>
-          </InputShell>
+          </SelectShell>
         </div>
 
         <div>
           <FieldLabel>{copy.planner.goalMode}</FieldLabel>
-          <InputShell>
+          <SelectShell>
             <select
-              className="w-full bg-transparent text-sm text-[color:var(--text-primary)] outline-none"
+              className="diet-select w-full appearance-none bg-transparent pr-6 text-sm text-[color:var(--text-primary)] outline-none"
               value={profile.goalMode}
               onChange={(event) =>
                 setProfile((state) => ({ ...state, goalMode: event.target.value as GoalMode }))
@@ -215,7 +240,7 @@ export function UserProfilePlanner({ locale }: UserProfilePlannerProps) {
                 </option>
               ))}
             </select>
-          </InputShell>
+          </SelectShell>
         </div>
       </div>
 
@@ -231,6 +256,7 @@ export function UserProfilePlanner({ locale }: UserProfilePlannerProps) {
           <p className="mt-1 text-lg font-semibold text-[color:var(--text-primary)]">
             {formatCalories(locale, calorieResult.maintenanceCalories)} kcal
           </p>
+          <p className="mt-1 text-xs text-[color:var(--text-secondary)]">+{formatCalories(locale, maintenanceDelta)} kcal vs BMR</p>
         </div>
         <div className="rounded-xl border border-[color:var(--glass-border)] bg-[color:var(--glass-bg-strong)] p-3">
           <p className="text-xs uppercase tracking-wide text-[color:var(--text-secondary)]">{copy.planner.cards.target}</p>
@@ -240,12 +266,15 @@ export function UserProfilePlanner({ locale }: UserProfilePlannerProps) {
           <p className="mt-1 text-xs text-[color:var(--text-secondary)]">
             {copy.planner.cards.adjustment} {Math.round(calorieResult.goalAdjustmentPercent * 100)}%
           </p>
+          <p className="mt-1 text-xs text-[color:var(--text-secondary)]">
+            {targetDelta >= 0 ? "+" : ""}
+            {formatCalories(locale, targetDelta)} kcal vs {copy.planner.cards.maintenance}
+          </p>
         </div>
         <div className="rounded-xl border border-[color:var(--glass-border)] bg-[color:var(--glass-bg-strong)] p-3">
           <p className="text-xs uppercase tracking-wide text-[color:var(--text-secondary)]">{copy.planner.cards.optimizerFocus}</p>
-          <p className="mt-1 text-lg font-semibold text-[color:var(--text-primary)]">
-            {copy.planner.cards.budgetVsNutrition}
-          </p>
+          <p className="mt-1 text-sm font-semibold text-[color:var(--text-primary)]">{optimizerFocusValue}</p>
+          <p className="mt-1 text-xs text-[color:var(--text-secondary)]">{profile.region} • {filteredRecommendations.length} foods</p>
         </div>
       </div>
 

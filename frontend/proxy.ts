@@ -16,11 +16,11 @@ function detectLocale(request: NextRequest) {
   return defaultLocale;
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Skip locale redirection for static assets served from /public
-  // (e.g. /hero/slide-1.svg) so they are not rewritten to /en/hero/...
+  // so they are not rewritten to /en/hero/... style paths.
   const isPublicAsset = /\.[a-zA-Z0-9]+$/.test(pathname);
   if (isPublicAsset) {
     return NextResponse.next();

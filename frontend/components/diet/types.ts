@@ -12,6 +12,8 @@ export type MacroNutrients = {
 export type RegionalMealOption = {
   id: string;
   name: string;
+  name_hi?: string;
+  name_bn?: string;
   region: string;
   calories: number;
   macros: MacroNutrients;
@@ -20,6 +22,8 @@ export type RegionalMealOption = {
 export type RegionalMeal = {
   id: string;
   name: string;
+  name_hi?: string;
+  name_bn?: string;
   region: string;
   mealTime: MealTime;
   calories: number;

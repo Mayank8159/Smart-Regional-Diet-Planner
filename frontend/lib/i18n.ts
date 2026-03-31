@@ -87,6 +87,51 @@ export type LocaleCopy = {
     score: string;
     affordability: string;
   };
+  profilePlanner: {
+    title: string;
+    subtitle: string;
+    yourProfile: string;
+    age: string;
+    weight: string;
+    height: string;
+    gender: string;
+    activity: string;
+    goal: string;
+    location: string;
+    genderOptions: { male: string; female: string; other: string };
+    activityOptions: {
+      sedentary: string;
+      light: string;
+      moderate: string;
+      active: string;
+    };
+    goalOptions: {
+      "weight-loss": string;
+      maintain: string;
+      "muscle-gain": string;
+    };
+    locationStatus: {
+      detecting: string;
+      detected: string;
+      failed: string;
+      idle: string;
+    };
+    dailyTargets: string;
+    goalMode: string;
+    bmr: string;
+    maintenanceCalories: string;
+    goalCalories: string;
+    maintenanceMinus200: string;
+    maintenancePlus200: string;
+    maintenanceOnly: string;
+    mealSuggestionsTitle: string;
+    mealSuggestionsSubtitle: string;
+    selectFoodItem: string;
+    add: string;
+    remove: string;
+    noItemsYet: string;
+    goalCompletion: string;
+  };
 };
 
 export const copyByLocale: Record<Locale, LocaleCopy> = {
@@ -181,6 +226,51 @@ export const copyByLocale: Record<Locale, LocaleCopy> = {
       score: "Score",
       affordability: "Affordability",
     },
+    profilePlanner: {
+      title: "Profile Planner",
+      subtitle: "Auto-detect location, calculate your calorie and macro targets, and build a meal plan by slot.",
+      yourProfile: "Your Profile",
+      age: "Age",
+      weight: "Weight (kg)",
+      height: "Height (cm)",
+      gender: "Gender",
+      activity: "Activity",
+      goal: "Goal",
+      location: "Location",
+      genderOptions: { male: "Male", female: "Female", other: "Other" },
+      activityOptions: {
+        sedentary: "Sedentary",
+        light: "Light",
+        moderate: "Moderate",
+        active: "Active",
+      },
+      goalOptions: {
+        "weight-loss": "Weight Loss",
+        maintain: "Maintain",
+        "muscle-gain": "Muscle Gain",
+      },
+      locationStatus: {
+        detecting: "Detecting your location...",
+        detected: "Detected location: {location}",
+        failed: "Could not auto-detect location. You can select it manually.",
+        idle: "Location not detected yet.",
+      },
+      dailyTargets: "Daily Targets",
+      goalMode: "Goal Mode",
+      bmr: "BMR",
+      maintenanceCalories: "Maintenance Calories",
+      goalCalories: "Goal Calories",
+      maintenanceMinus200: "Maintenance - 200 kcal",
+      maintenancePlus200: "Maintenance + 200 kcal",
+      maintenanceOnly: "Maintenance calories",
+      mealSuggestionsTitle: "Meal Suggestions For {location}",
+      mealSuggestionsSubtitle: "Select a food item and assign it to a meal slot.",
+      selectFoodItem: "Select food item",
+      add: "Add",
+      remove: "Remove",
+      noItemsYet: "No items yet",
+      goalCompletion: "Goal Completion",
+    },
   },
   hi: {
     appBadge: "स्मार्ट भारतीय डाइट प्लानर",
@@ -273,6 +363,51 @@ export const copyByLocale: Record<Locale, LocaleCopy> = {
       score: "स्कोर",
       affordability: "किफ़ायती स्तर",
     },
+    profilePlanner: {
+      title: "प्रोफाइल प्लानर",
+      subtitle: "लोकेशन स्वतः पहचानें, अपनी कैलोरी और मैक्रो लक्ष्य निकालें, और मील स्लॉट के अनुसार योजना बनाएं।",
+      yourProfile: "आपकी प्रोफाइल",
+      age: "उम्र",
+      weight: "वज़न (किग्रा)",
+      height: "लंबाई (सेमी)",
+      gender: "लिंग",
+      activity: "गतिविधि",
+      goal: "लक्ष्य",
+      location: "लोकेशन",
+      genderOptions: { male: "पुरुष", female: "महिला", other: "अन्य" },
+      activityOptions: {
+        sedentary: "निष्क्रिय",
+        light: "हल्की सक्रियता",
+        moderate: "मध्यम सक्रियता",
+        active: "बहुत सक्रिय",
+      },
+      goalOptions: {
+        "weight-loss": "वज़न घटाना",
+        maintain: "वर्तमान बनाए रखें",
+        "muscle-gain": "मांसपेशी बढ़ाना",
+      },
+      locationStatus: {
+        detecting: "आपकी लोकेशन पहचानी जा रही है...",
+        detected: "पहचानी गई लोकेशन: {location}",
+        failed: "लोकेशन स्वतः नहीं पहचान पाए। आप इसे मैन्युअली चुन सकते हैं।",
+        idle: "लोकेशन अभी पहचानी नहीं गई है।",
+      },
+      dailyTargets: "दैनिक लक्ष्य",
+      goalMode: "लक्ष्य मोड",
+      bmr: "BMR",
+      maintenanceCalories: "मेंटेनेंस कैलोरी",
+      goalCalories: "लक्ष्य कैलोरी",
+      maintenanceMinus200: "मेंटेनेंस - 200 kcal",
+      maintenancePlus200: "मेंटेनेंस + 200 kcal",
+      maintenanceOnly: "मेंटेनेंस कैलोरी",
+      mealSuggestionsTitle: "{location} के लिए भोजन सुझाव",
+      mealSuggestionsSubtitle: "खाद्य आइटम चुनें और उसे मील स्लॉट में जोड़ें।",
+      selectFoodItem: "खाद्य आइटम चुनें",
+      add: "जोड़ें",
+      remove: "हटाएँ",
+      noItemsYet: "अभी कोई आइटम नहीं",
+      goalCompletion: "लक्ष्य पूर्णता",
+    },
   },
   bn: {
     appBadge: "স্মার্ট ভারতীয় ডায়েট প্ল্যানার",
@@ -364,6 +499,51 @@ export const copyByLocale: Record<Locale, LocaleCopy> = {
       page: "পৃষ্ঠা",
       score: "স্কোর",
       affordability: "সাশ্রয়ীতা",
+    },
+    profilePlanner: {
+      title: "প্রোফাইল প্ল্যানার",
+      subtitle: "লোকেশন স্বয়ংক্রিয়ভাবে শনাক্ত করুন, ক্যালোরি ও ম্যাক্রো লক্ষ্য হিসাব করুন, এবং মিল স্লট অনুযায়ী পরিকল্পনা তৈরি করুন।",
+      yourProfile: "আপনার প্রোফাইল",
+      age: "বয়স",
+      weight: "ওজন (কেজি)",
+      height: "উচ্চতা (সেমি)",
+      gender: "লিঙ্গ",
+      activity: "কার্যকলাপ",
+      goal: "লক্ষ্য",
+      location: "লোকেশন",
+      genderOptions: { male: "পুরুষ", female: "মহিলা", other: "অন্যান্য" },
+      activityOptions: {
+        sedentary: "নিষ্ক্রিয়",
+        light: "হালকা সক্রিয়",
+        moderate: "মধ্যম সক্রিয়",
+        active: "খুব সক্রিয়",
+      },
+      goalOptions: {
+        "weight-loss": "ওজন কমানো",
+        maintain: "বর্তমান বজায় রাখা",
+        "muscle-gain": "পেশি বাড়ানো",
+      },
+      locationStatus: {
+        detecting: "আপনার লোকেশন শনাক্ত করা হচ্ছে...",
+        detected: "শনাক্ত লোকেশন: {location}",
+        failed: "লোকেশন স্বয়ংক্রিয়ভাবে শনাক্ত করা যায়নি। আপনি নিজে নির্বাচন করতে পারেন।",
+        idle: "এখনও লোকেশন শনাক্ত করা হয়নি।",
+      },
+      dailyTargets: "দৈনিক লক্ষ্য",
+      goalMode: "লক্ষ্য মোড",
+      bmr: "BMR",
+      maintenanceCalories: "মেইনটেন্যান্স ক্যালোরি",
+      goalCalories: "লক্ষ্য ক্যালোরি",
+      maintenanceMinus200: "মেইনটেন্যান্স - 200 kcal",
+      maintenancePlus200: "মেইনটেন্যান্স + 200 kcal",
+      maintenanceOnly: "মেইনটেন্যান্স ক্যালোরি",
+      mealSuggestionsTitle: "{location} এর জন্য খাবারের পরামর্শ",
+      mealSuggestionsSubtitle: "খাবারের আইটেম বাছুন এবং মিল স্লটে যোগ করুন।",
+      selectFoodItem: "খাবারের আইটেম বাছুন",
+      add: "যোগ করুন",
+      remove: "সরান",
+      noItemsYet: "এখনও কোনো আইটেম নেই",
+      goalCompletion: "লক্ষ্য পূরণ",
     },
   },
 };
